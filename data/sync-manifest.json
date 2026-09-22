@@ -1,0 +1,16 @@
+{
+  "capturedAt": "2026-09-13T06:00:41.424Z",
+  "books": 16,
+  "tests": 64,
+  "sectionsExpected": 256,
+  "sectionsSaved": 256,
+  "sectionErrors": [],
+  "intensiveExpected": 256,
+  "intensiveSaved": 256,
+  "intensiveErrors": [],
+  "intensiveCountsSaved": 256,
+  "resourcesFound": 555,
+  "resourcesSaved": 555,
+  "resourceErrors": [],
+  "resourceBytes": 2684219677
+}

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="爱跳舞的女博士：剑雅听力做题、精听与复盘练习。" />
+    <title>爱跳舞的女博士 | 剑雅听力做题与精听练习</title>
+    <link rel="icon" type="image/png" href="assets/ui/character-logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#" aria-label="爱跳舞的女博士首页">
+          <img src="assets/ui/character-logo.png" alt="爱跳舞的女博士人物标志" />
+          <span><strong>爱跳舞的女博士</strong><small>IELTS LISTENING</small></span>
+        </a>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="ad-banner" id="topBanner">
+        <img src="assets/ui/character-hero.png" alt="卡通人物正在进行听力训练" />
+        <div class="banner-copy"><small>爱跳舞的女博士 · IELTS LISTENING</small><strong>剑雅听力<br />陪你逐句练</strong><span>做题、精听、复盘，把每一道听力题听明白</span><button type="button" data-scroll-practice>开始做题　›</button></div>
+        <button class="banner-close" type="button" aria-label="关闭横幅" data-close-banner>×</button>
+      </div>
+
+      <div class="columns">
+        <section class="content-column">
+          <div class="hero-card">
+            <h1>剑雅听力真题练习 <span>LISTENING</span></h1>
+            <div class="mode-tabs" role="tablist" aria-label="听力练习方式">
+              <button class="active" data-mode="order" role="tab">听力顺序练习</button>
+              <button data-mode="section" role="tab">按Section练习</button>
+              <button data-mode="topic" role="tab">按话题练习</button>
+              <button data-mode="intensive" role="tab">精听拓展练习</button>
+            </div>
+            <svg class="headphones" viewBox="0 0 120 95" aria-hidden="true">
+              <path d="M21 52a39 39 0 0 1 78 0" fill="none" stroke="#7c7ae6" stroke-width="9" stroke-linecap="round"/>
+              <path d="M17 50h17v34H23a9 9 0 0 1-9-9V57a7 7 0 0 1 3-7Zm86 0H86v34h11a9 9 0 0 0 9-9V57a7 7 0 0 0-3-7Z" fill="#7c7ae6"/>
+              <path d="M40 28c6-7 15-11 25-10" fill="none" stroke="#5bd2af" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="catalog-card">
+            <div class="filter-bar" id="bookFilters" aria-label="剑雅册数筛选"></div>
+            <div class="catalog-content" id="catalogContent"></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <section class="intensive-landing" id="intensiveLanding" hidden></section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <dialog id="practiceDialog">
+      <div class="dialog-card exam-dialog-card">
+        <header class="exam-header">
+          <span class="exam-brand"><img src="assets/ui/character-logo.png" alt="爱跳舞的女博士人物标志" /><strong>爱跳舞的女博士</strong></span>
+          <div class="exam-clock exam-runtime-controls">◴ <span id="examTimer">00 : 00</span></div>
+          <div class="exam-buttons">
+            <button class="exam-runtime-controls" id="pausePractice" type="button">暂停答题</button>
+            <button id="quitPractice" type="button">退出练习</button>
+            <button class="exam-runtime-controls" id="checkAnswers" type="button">交卷</button>
+          </div>
+          <label class="exam-volume">🔊 <input id="practiceVolume" type="range" min="0" max="1" value="0.8" step="0.05" aria-label="音量" /></label>
+        </header>
+        <section class="exam-section-bar">
+          <div><h2 id="dialogTitle">Section 练习</h2><p id="dialogSubtitle">Listen and answer questions 1–10</p></div>
+          <div class="practice-player exam-runtime-controls" id="practiceAudio">
+            <button id="practicePlay" type="button" title="快捷键-空格">▶</button>
+            <input id="practiceProgress" type="range" min="0" max="100" step=".01" value="0" aria-label="播放进度" />
+            <span id="practiceTime">00:00 / 00:00</span>
+            <audio id="practiceAudioElement" preload="metadata"></audio>
+          </div>
+        </section>
+        <section class="audio-test-screen" id="practiceStart" hidden>
+          <div class="audio-test-shell">
+            <h2>Test</h2>
+            <div class="audio-test-card">
+              <p>Put on your headphones and click on the Play sound button to play a sample sound.</p>
+              <button class="sound-test-button" id="testSound" type="button"><span>Play sound</span></button>
+              <p class="sound-warning">If you cannot hear the sound clearly, please tell the invigilator.</p>
+              <button class="continue-button" id="continuePractice" type="button">Continue</button>
+            </div>
+          </div>
+          <audio id="testAudio" preload="metadata"></audio>
+        </section>
+        <div id="practiceWorkspace" hidden>
+          <div class="question-tools"><button type="button" data-question-favorite>★ 收藏本题</button><button type="button" data-question-correction>⊗ 题目纠错</button></div>
+          <main class="practice-body" id="practiceBody"></main>
+          <section class="result-summary" id="resultSummary" hidden></section>
+          <section class="answer-review" id="answerReview" hidden></section>
+          <footer class="practice-actions">
+            <label class="review-check"><input type="checkbox" /> Review</label>
+            <div class="question-dots" id="questionDots" aria-label="本节题目进度"></div>
+            <button class="sheet-tool" id="clearSection" type="button" title="清空答案">▣</button>
+            <button class="sheet-arrow" id="previousQuestion" type="button" aria-label="上一题">←</button>
+            <button class="sheet-arrow" id="nextQuestion" type="button" aria-label="下一题">→</button>
+          </footer>
+        </div>
+        <section class="practice-result" id="practiceResult" hidden>
+          <header class="result-header">
+            <span class="result-brand"><img src="assets/ui/character-logo.png" alt="爱跳舞的女博士人物标志" /><strong>爱跳舞的女博士</strong></span>
+            <div><span id="resultElapsed">总耗时：0m0s</span><button id="resultIntensive" type="button">精听本文</button><button id="resultNext" type="button">下一题</button><button id="resultExit" type="button">退出练习</button></div>
+          </header>
+          <div class="result-scroll">
+            <article class="result-card">
+              <h2>练习结果</h2>
+              <p id="resultSectionTitle"></p>
+              <p id="resultDate"></p>
+              <table class="result-metrics"><thead><tr><th>题目总数</th><th>正确题数</th><th>错误题数</th><th>未完成题数</th><th>正确率</th><th>平台平均正确率</th></tr></thead><tbody id="resultMetrics"></tbody></table>
+              <h3>答题情况</h3>
+              <div class="result-answer-area">
+                <table><thead><tr><th>题号</th><th>我的答案</th><th>正确答案</th></tr></thead><tbody id="resultAnswerRows"></tbody></table>
+                <div class="result-chart"><h3>题目正确率分布</h3><div class="result-donut-wrap"><div id="resultDonut"></div><span class="pie-label pie-correct" id="resultCorrectLabel"></span><span class="pie-label pie-wrong" id="resultWrongLabel"></span><span class="pie-label pie-unanswered" id="resultUnansweredLabel"></span></div><p><i></i>正确　<i></i>错误　<i></i>未做</p></div>
+              </div>
+              <button class="result-detail-button" id="viewQuestionDetails" type="button">题目详情查看</button>
+            </article>
+          </div>
+        </section>
+        <section class="practice-modal" id="pauseOverlay" hidden><div><p>计时器已暂停。点击下方按钮将继续答题。</p><button id="resumePractice" type="button">继续做题</button></div></section>
+        <section class="practice-modal" id="quitOverlay" hidden><div><p>确定要退出本次练习吗？</p><p>退出后本次作答会保存在当前设备，之后可以继续答题。</p><div><button id="cancelQuit" type="button">取消</button><button class="outline" id="confirmQuit" type="button">确定</button></div></div></section>
+      </div>
+    </dialog>
+
+    <dialog id="intensiveDialog">
+      <div class="intensive-shell">
+        <header class="intensive-header">
+          <span class="exam-brand"><img src="assets/ui/character-logo.png" alt="爱跳舞的女博士人物标志" /><strong>爱跳舞的女博士</strong></span>
+          <h2>精听听写: <span id="intensiveTitle"></span></h2>
+          <div>
+            <button type="button" data-correction>✎ 原文纠错</button>
+            <a id="downloadAudio" download>🔊 下载音频</a>
+            <button type="button" data-end-intensive>✓ 结束训练</button>
+          </div>
+        </header>
+        <section class="intensive-workspace">
+          <aside class="sentence-sidebar">
+            <h3>☰　句子列表</h3>
+            <ol id="sentenceList"></ol>
+          </aside>
+          <main class="intensive-main">
+            <div class="intensive-controls">
+              <div class="intensive-modes"><button type="button" data-int-mode="sentence">句子精听</button><button type="button" data-int-mode="full">全文精听</button></div>
+              <label><select id="repeatMode"><option value="1">播放一次</option><option value="3">播放三次</option><option value="0">无限循环</option></select></label>
+              <label><select id="speedMode"><option value=".75">速度X0.75</option><option value="1" selected>速度X1.0</option><option value="1.25">速度X1.25</option><option value="1.5">速度X1.5</option><option value="1.8">速度X1.8</option><option value="2">速度X2.0</option></select></label>
+            </div>
+            <div class="intensive-player">
+              <button type="button" id="intensivePlay" title="快捷键-空格">▶</button>
+              <input id="intensiveProgress" type="range" min="0" max="100" step=".01" value="0" aria-label="播放进度" />
+              <span id="intensiveTime">00:00 / 00:00</span>
+            </div>
+            <div class="text-toggles">
+              <button type="button" data-toggle-en>显示 / 隐藏原文</button>
+              <button type="button" data-toggle-cn>显示 / 隐藏译文</button>
+            </div>
+            <p class="shortcut-hint">
+              <span>快捷键：“空格” 播放/暂停</span>
+              <span class="shortcut-prev">上一句</span>
+              <span class="shortcut-next">下一句</span>
+              <span class="shortcut-original" id="shortcutOriginal">显示 / 隐藏原文</span>
+              <span class="shortcut-translation" id="shortcutTranslation">显示 / 隐藏译文</span>
+              <span>“shift” 重播</span>
+            </p>
+            <div class="intensive-text">
+              <span class="sentence-counter" id="sentenceCounter">1 / 1</span>
+              <button class="favorite-sentence" type="button" data-favorite-sentence>★ 收藏本句</button>
+              <button type="button" data-prev-sentence aria-label="上一句">‹</button>
+              <article><p id="englishText">点击显示原文</p><p id="chineseText"></p><ul class="full-text-list" id="fullTextList" hidden></ul></article>
+              <button type="button" data-next-sentence aria-label="下一句">›</button>
+            </div>
+          </main>
+        </section>
+        <section class="correction-panel" id="correctionPanel" hidden>
+          <div>
+            <button type="button" data-close-correction>×</button>
+            <h3>谢谢你帮我完善练习内容</h3>
+            <label>错误类型：<select id="correctionType"><option>单词错误</option><option>音频错误</option><option>断句错误</option><option>其他</option></select></label>
+            <label>错误描述：<textarea id="correctionText" maxlength="500"></textarea></label>
+            <button type="button" class="primary-button" data-submit-correction>提交</button>
+          </div>
+        </section>
+        <section class="intensive-tutorial" id="intensiveTutorial" hidden>
+          <button type="button" data-close-tutorial>×</button>
+          <h2>用好快捷键，精听更方便</h2>
+          <p>↑ 显示/隐藏原文　　↓ 显示/隐藏译文</p>
+          <p>← 上一句　　→ 下一句</p>
+          <p><kbd>shift</kbd> 重播　　<kbd>空格键</kbd> 控制播放/暂停</p>
+        </section>
+        <audio id="intensiveAudio" preload="metadata"></audio>
+      </div>
+    </dialog>
+
+    <footer>爱跳舞的女博士 · 剑雅听力练习<br />练习记录仅保存在当前设备<br />本项目为独立学习工具，与剑桥大学出版社及原平台无隶属或合作关系；题库与音频由项目维护者依据已取得的公开再发布授权提供。</footer>
+
+    <script src="data/listening.js"></script>
+    <script src="data/listening-content.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
